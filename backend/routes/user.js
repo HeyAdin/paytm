@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 // Signup Route
-const {validateSiginInInput , validateSignUpInput} = require('./types');
+const {validateSiginInInput , validateSignUpInput, validateUserCredential} = require('./types');
 const { Users } = require('../db');
 
 // Checks user exist in database
@@ -62,4 +62,20 @@ router.post('/signin',validateSiginInInput,async(req,res)=>{
     }
 });
 
+// User Update Profile
+const { authMiddleware } = require('./middleware');
+
+router.put('/',validateUserCredential,authMiddleware,async(req,res)=>{
+    const body = req.body;
+    const _id = req.userId;
+    const updateUser = await Users.updateOne({_id},body);
+    if(updateUser.modifiedCount){
+        res.status(200).json({msg: "updated successfully"});
+    }
+    else{
+        res.status(411).json({
+            msg : "error while updating"
+        });
+    }
+});
 module.exports = router;
