@@ -1,4 +1,5 @@
 const zod = require('zod');
+const { use } = require('./user');
 
 const signUpInputSchema = zod.object({
     username: zod.string().email(),
@@ -23,7 +24,7 @@ const siginInputSchema = zod.object({
     username : zod.string().email(),
     password : zod.string().min(6)
 });
-
+// checks correct inputs for sign in
 function validateSiginInInput(req,res,next){
     const body = req.body;
     const response = siginInputSchema.safeParse(body);
@@ -35,7 +36,29 @@ function validateSiginInInput(req,res,next){
         res.status(411).json({ msg: "invalid inputs" });
     }
 }
+
+
+const userCredentialInput = zod.object({
+    password : zod.string().min(8).optional(),
+    firstName : zod.string().max(50).optional(),
+    lastName : zod.string().max(50).optional()
+});
+
+// check correct input for user updation 
+function validateUserCredential(req,res,next){
+    const body = req.body;
+    const {success} = userCredentialInput.safeParse(body);
+    if(success){
+        next();
+    }
+    else{
+        res.status(411).json({
+            msg : "invalid inputs"
+        })
+    }
+}
 module.exports = {
     validateSignUpInput,
-    validateSiginInInput
+    validateSiginInInput,
+    validateUserCredential
 }
