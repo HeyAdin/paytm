@@ -3,7 +3,7 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 
 // Signup Route
-const {validateSiginInInput , validateSignUpInput, validateUserCredential} = require('./types');
+const { validateSiginInInput, validateSignUpInput, validateUserCredential } = require('./types');
 const { Users } = require('../db');
 
 // Checks user exist in database
@@ -44,20 +44,20 @@ router.post('/signup', validateSignUpInput, async (req, res) => {
 
 
 //  Sign In routes
-router.post('/signin',validateSiginInInput,async(req,res)=>{
+router.post('/signin', validateSiginInInput, async (req, res) => {
     const body = req.body;
     const exist = await userExist(body.username);
-    if(exist){
+    if (exist) {
         const token = jwt.sign({
-            userId : exist._id
-        },process.env.SECRET_KEY);
+            userId: exist._id
+        }, process.env.SECRET_KEY);
         res.status(200).json({
             token
         });
     }
-    else{
+    else {
         res.status(411).json({
-            msg : "user doesn't exist"
+            msg: "user doesn't exist"
         });
     }
 });
@@ -65,17 +65,38 @@ router.post('/signin',validateSiginInInput,async(req,res)=>{
 // User Update Profile
 const { authMiddleware } = require('./middleware');
 
-router.put('/',validateUserCredential,authMiddleware,async(req,res)=>{
+router.put('/', validateUserCredential, authMiddleware, async (req, res) => {
     const body = req.body;
     const _id = req.userId;
-    const updateUser = await Users.updateOne({_id},body);
-    if(updateUser.modifiedCount){
-        res.status(200).json({msg: "updated successfully"});
+    const updateUser = await Users.updateOne({ _id }, body);
+    if (updateUser.modifiedCount) {
+        res.status(200).json({ msg: "updated successfully" });
     }
-    else{
+    else {
         res.status(411).json({
-            msg : "error while updating"
+            msg: "error while updating"
         });
     }
 });
+
+// route to get filtered user
+router.get('/bulk', authMiddleware, async (req, res) => {
+    const filter = req.query.filter || "";
+    const filteredUser = await Users.find({
+        $or: [
+            {
+                firstName: { "$regex": filter, '$options' : 'i'},
+            },
+            {
+                lastName: { "$regex": filter,'$options' : 'i' }
+            }
+        ]
+    })
+    res.json({
+        user : filteredUser.map((userList)=>{
+            return {firstName : userList.firstName , lastName : userList.lastName, _id : userList._id} 
+        })
+    })
+
+})
 module.exports = router;
