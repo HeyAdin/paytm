@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 
 // Signup Route
 const { validateSiginInInput, validateSignUpInput, validateUserCredential } = require('./types');
-const { Users } = require('../db');
+const { Users, Accounts } = require('../db');
 
 // Checks user exist in database
 async function userExist(username) {
@@ -25,7 +25,12 @@ router.post('/signup', validateSignUpInput, async (req, res) => {
     if (!await userExist(body.username)) {
         const user = await Users.create(body);
         user.save();
-        console.log(user)
+        const balance =1+ Math.floor(Math.random()*10000);
+        const account = await Accounts.create({
+            userId : user._id,
+            balance
+        });
+        account.save();
         const token = jwt.sign({
             userId: user._id
         }, process.env.SECRET_KEY);
