@@ -1,5 +1,4 @@
 const zod = require('zod');
-const { use } = require('./user');
 
 const signUpInputSchema = zod.object({
     username: zod.string().email(),
