@@ -32,6 +32,7 @@ const userSchema = new mongoose.Schema({
 })
 const Users = mongoose.model('Users',userSchema);
 
+// Accounts Schema 
 const accountSchema = new mongoose.Schema({
     userId :{
         type: mongoose.Schema.Types.ObjectId,
