@@ -14,8 +14,8 @@ export default function Signup(){
         <Input type={'text'} lable={'Last Name'} id={"lastName"} placeholder={"Doe"}/>
         <Input type={'email'} lable={'Email'} id={"username"} placeholder={"johndoe@gmail.com"}/>
         <Input type={'password'} lable={'Password'} id={"password"} />
-        <ButtonComponent buttonTitle={"Sign Up"} backgroundColor={"blueViolet"} fontSize={"24px"}/>
+        <ButtonComponent buttonTitle={"Sign Up"} backgroundColor={"blueViolet"} fontSize={"24px"} route={"http://localhost:8001/api/v1/user/signup"}/>
         </RecoilRoot>
-        <BelowButtonWarning warning={"Already have an account "} warningButton={<a style={{ color:"black", cursor:"pointer" ,textDecoration:"underline", fontWeight:"bold"}}>Sign in</a>} />
+        <BelowButtonWarning warning={"Already have an account "} warningButton={<a href="/signin" style={{ color:"black", cursor:"pointer" ,textDecoration:"underline", fontWeight:"bold"}}>Sign in</a>} />
     </div>
 }

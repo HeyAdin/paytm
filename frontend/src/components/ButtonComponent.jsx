@@ -1,7 +1,7 @@
 import axios from "axios"
 import { useRecoilValue } from "recoil";
 import { inputAtom } from "../atoms/inputs";
-export default function ButtonComponent({ buttonTitle,backgroundColor,fontSize}) {
+export default function ButtonComponent({ buttonTitle,backgroundColor,fontSize , route}) {
         const userInput = useRecoilValue(inputAtom);
     return <div>
         <button style={{
@@ -16,9 +16,10 @@ export default function ButtonComponent({ buttonTitle,backgroundColor,fontSize})
         cursor:"pointer"
     }} onClick={async()=>{
         console.log(userInput);
-        const response = await axios.post("http://localhost:8001/api/v1/user/signup",userInput);
+        const response = await axios.post(route,userInput);
         const data = response.data;
         localStorage.setItem("token", data.token);
+        console.log(data.token)
     }}>{buttonTitle}</button>
     </div>
 }
