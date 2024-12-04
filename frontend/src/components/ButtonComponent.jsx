@@ -18,8 +18,8 @@ export default function ButtonComponent({ buttonTitle,backgroundColor,fontSize ,
         console.log(userInput);
         const response = await axios.post(route,userInput);
         const data = response.data;
-        localStorage.setItem("token", data.token);
-        console.log(data.token)
+        const token = "Bearer "+data.token;
+        localStorage.setItem("token", token);
     }}>{buttonTitle}</button>
     </div>
 }
