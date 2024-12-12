@@ -1,5 +1,5 @@
 export default function SubHeading({subTitle}){
-    return <div>
-        <p style={{textAlign : 'center',fontSize : "22px", color:"rgb(98, 96, 96)"}}>{subTitle}</p>
+    return <div className="text-slate-500 text-md pt-2 px-4 pb-4">
+        {subTitle}
     </div>
 }
