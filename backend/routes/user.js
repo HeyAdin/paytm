@@ -7,9 +7,10 @@ const { validateSiginInInput, validateSignUpInput, validateUserCredential } = re
 const { Users, Accounts } = require('../db');
 
 // Checks user exist in database
-async function userExist(username) {
+async function userExist(username,password) {
     const exist = await Users.findOne({
         username,
+        password
     });
     if (exist === null) {
         return false;
@@ -22,7 +23,7 @@ async function userExist(username) {
 // Sign Up route for users
 router.post('/signup', validateSignUpInput, async (req, res) => {
     const body = req.body;
-    if (!await userExist(body.username)) {
+    if (!await userExist(body.username,body.password)) {
         const user = await Users.create(body);
         user.save();
         const balance =1+ Math.floor(Math.random()*10000);
@@ -51,12 +52,13 @@ router.post('/signup', validateSignUpInput, async (req, res) => {
 //  Sign In routes
 router.post('/signin', validateSiginInInput, async (req, res) => {
     const body = req.body;
-    const exist = await userExist(body.username);
+    const exist = await userExist(body.username,body.password);
     if (exist) {
         const token = jwt.sign({
             userId: exist._id
         }, process.env.SECRET_KEY);
         res.status(200).json({
+            msg : "user signin successful",
             token
         });
     }
