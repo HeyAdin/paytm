@@ -10,17 +10,7 @@ import { RecoilRoot } from 'recoil';
 function App() {
 
 
-    return <div style={{
-        height: "99vh",
-        width: "100vw",
-        backgroundColor: "gray",
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-        alignContent: "center",
-        margin: "0px",
-        padding: "0px"
-    }}>
+    return <div>
         <RecoilRoot>
             <BrowserRouter>
                 <Routes>
